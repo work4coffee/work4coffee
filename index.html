@@ -58,3 +58,165 @@
     </div>
 </body>
 </html>
+<!--
+#include <iostream>
+#include <vector>
+#include <random>
+#include <time.h>
+
+
+using std::array;
+using std::vector;
+using std::cout;
+using std::cin;
+using std::endl;
+
+class Matrix : public vector<vector<double>>
+{
+public:
+	int rows;
+	int cols;
+
+	Matrix setSize(int r, int c)
+	{
+		this->resize(r);
+
+		for (auto& element : *this)
+		{
+			element.resize(c);
+		}
+
+		rows = r;
+		cols = c;
+
+		return *this;
+	}
+
+	Matrix transponse()
+	{
+		Matrix t;
+		t.setSize(cols, rows);
+
+		for (int r = 0; r < rows; r++)
+			for (int c = 0; c < cols; c++)
+				t[c][r] = (*this)[r][c];
+		
+		return t;
+	}
+
+	
+
+};
+
+
+float random(float high, float low);
+void printMatrix(const Matrix& m);
+Matrix operator+(const Matrix& m, float scalar);
+Matrix operator+(const Matrix& m1, const Matrix& m2);
+Matrix operator+(float scalar, const Matrix& m);
+Matrix operator*(const Matrix& m1, const Matrix& m2);
+void fillMatrixRandom(Matrix& m, float low, float high);
+
+
+int main()
+{
+	srand(time(0));
+
+	Matrix m1;
+	m1.setSize(2, 1);
+	Matrix m2;
+	m2.setSize(1, 2);
+
+	fillMatrixRandom(m1, 0, 10);
+	fillMatrixRandom(m2, 0, 10);
+
+	printMatrix(m1 * m2);
+}
+
+Matrix operator+(const Matrix& m1, const Matrix& m2)
+{
+	if (m1.rows != m2.rows || m1.cols != m2.cols)
+		throw;
+
+	int rows = m1.rows;
+	int cols = m1.cols;
+
+	Matrix sum;
+	sum.setSize(rows, cols);
+
+	for (int r = 0; r < rows; r++)
+	{
+		for (int c = 0; c < cols; c++)
+		{
+			sum[r][c] = m1[r][c] + m2[r][c];
+		}
+	}
+
+	return sum;
+}
+
+Matrix operator+(const Matrix& m, float scalar)
+{
+
+	int rows = m.rows;
+	int cols = m.cols;
+
+	Matrix sum;
+	sum.setSize(rows, cols);
+
+	for (int r = 0; r < rows; r++)
+	{
+		for (int c = 0; c < cols; c++)
+		{
+			sum[r][c] = m[r][c] + scalar;
+		}
+	}
+
+	return sum;
+	
+}
+
+Matrix operator+(float scalar, const Matrix& m)
+{
+	return m + scalar;
+}
+
+Matrix operator*(const Matrix& m1, const Matrix& m2)
+{
+	if (m1.cols != m2.rows)
+		throw;
+
+	Matrix product;
+	product.setSize(m1.rows, m2.cols);
+
+	for (int i = 0; i < m1.rows; i++)
+		for (int j = 0; j < m2.cols; j++)
+			for (int k = 0; k < m2.rows; k++)
+				product[i][j] += m1[i][k] * m2[k][j];
+	
+	return product;
+}
+
+void printMatrix(const Matrix& m)
+{
+	for (auto& row : m)
+	{
+		for (auto& elem : row)
+			cout << elem << "\t";
+		
+		cout << endl;
+	}
+}
+
+void fillMatrixRandom(Matrix& m, float low, float high)
+{
+	for (auto& row : m)
+		for (auto& elem : row)
+			elem = random(low, high);
+}
+
+float random(float low, float high)
+{
+	return low + (float)(rand()) / ((float)(RAND_MAX / (high - low)));
+}
+-->
