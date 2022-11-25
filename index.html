@@ -63,6 +63,7 @@
 #include <vector>
 #include <random>
 #include <time.h>
+#include <string>
 
 
 using std::array;
@@ -70,8 +71,10 @@ using std::vector;
 using std::cout;
 using std::cin;
 using std::endl;
+using std::string;
+using std::to_string;
 
-class Matrix : public vector<vector<double>>
+class Matrix : public vector<vector<float>>
 {
 public:
 	int rows;
@@ -104,8 +107,6 @@ public:
 		return t;
 	}
 
-	
-
 };
 
 
@@ -116,21 +117,19 @@ Matrix operator+(const Matrix& m1, const Matrix& m2);
 Matrix operator+(float scalar, const Matrix& m);
 Matrix operator*(const Matrix& m1, const Matrix& m2);
 void fillMatrixRandom(Matrix& m, float low, float high);
+string toPrecision(float n, int p);
 
 
 int main()
 {
 	srand(time(0));
 
-	Matrix m1;
-	m1.setSize(2, 1);
-	Matrix m2;
-	m2.setSize(1, 2);
+	Matrix m;
+	m.setSize(6, 3);
 
-	fillMatrixRandom(m1, 0, 10);
-	fillMatrixRandom(m2, 0, 10);
-
-	printMatrix(m1 * m2);
+	fillMatrixRandom(m, 0, 10);
+	printMatrix(m);
+	printMatrix(m.transponse());
 }
 
 Matrix operator+(const Matrix& m1, const Matrix& m2)
@@ -202,9 +201,9 @@ void printMatrix(const Matrix& m)
 	for (auto& row : m)
 	{
 		for (auto& elem : row)
-			cout << elem << "\t";
+			cout << toPrecision(elem, 3) << "\t";
 		
-		cout << endl;
+		cout << endl << endl;
 	}
 }
 
@@ -218,5 +217,22 @@ void fillMatrixRandom(Matrix& m, float low, float high)
 float random(float low, float high)
 {
 	return low + (float)(rand()) / ((float)(RAND_MAX / (high - low)));
+}
+
+string toPrecision(float n, int p)
+{
+	string numstring = to_string(n);
+
+	int currentPrecision{0};
+
+	for (int i = numstring.length() - 1; numstring[i] != '.'; i--)
+		currentPrecision++;
+
+	if (currentPrecision == numstring.length())
+		return numstring;
+
+	numstring.resize(numstring.length() - currentPrecision + p, '0');
+
+	return numstring;
 }
 -->
